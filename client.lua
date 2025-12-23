@@ -5,16 +5,9 @@ RegisterCommand('revive', function()
     -- GTA Revive
     NetworkResurrectLocalPlayer(coords.x, coords.y, coords.z, GetEntityHeading(ped), true, false)
     SetEntityHealth(ped, 200)
-
-    --visn_are fix
-    exports('revivePlayer', function()
-    exports('stopDeathScreen', function()
-    exports['visn_are']:revive()
-
-    -- Tasks & Animationen löschen
     ClearPedTasksImmediately(ped)
 
-    -- 🔴 visn_are Death / Injured FIX
+    -- visn_are Injured / Movement FIX
     ResetPedMovementClipset(ped, 0.0)
     ResetPedStrafeClipset(ped)
     ResetPedWeaponMovementClipset(ped)
@@ -25,10 +18,16 @@ RegisterCommand('revive', function()
     end
     TriggerEvent('esx:onPlayerSpawn')
 
-    -- ox_inventory
+    -- ⏳ WARTEN bis visn_are alles gesetzt hat
+    Wait(300)
+
+    -- 🔴 ox_inventory FINAL FIX
     LocalPlayer.state:set('dead', false, true)
     LocalPlayer.state:set('injured', false, true)
+
+    -- ox_inventory explizit öffnen erlauben
+    exports.ox_inventory:setPlayerBusy(false)
     TriggerEvent('ox_inventory:disarm', false)
 
-    print('[revive_command] Revive + Injured Fix ausgeführt')
-end, false)))
+    print('[revive_command] Revive + ox_inventory Fix ausgeführt')
+end, false)
