@@ -1,20 +1,14 @@
-RegisterCommand('revive', function(source, args)
+-- /revive Command
+RegisterCommand('inv', function(source, args)
     local src = source
 
-    -- Wenn keine ID angegeben → sich selbst reviven
-    if not args[1] then
-        TriggerClientEvent('revive:client', src)
-        return
-    end
-
-    local targetId = tonumber(args[1])
+    -- Spieler-ID ermitteln (falls keine ID, selbst reviven)
+    local targetId = args[1] and tonumber(args[1]) or src
 
     if GetPlayerName(targetId) then
-        TriggerClientEvent('revive:client', targetId)
-        print(('[revive] Spieler %s wurde revived von %s'):format(targetId, src))
+        TriggerClientEvent('txrevive:revivePlayer', targetId)
+        print(('[revive] Spieler %s revived von %s'):format(targetId, src))
     else
-        TriggerClientEvent('chat:addMessage', src, {
-            args = { '^1SYSTEM', 'Ungültige Spieler-ID!' }
-        })
+        TriggerClientEvent('chat:addMessage', src, { args = {'^1SYSTEM', 'Ungültige Spieler-ID!'} })
     end
 end, false)
